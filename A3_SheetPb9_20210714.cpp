@@ -5,24 +5,8 @@ Author: Selsabeel Asim Ali Elbagir
  Assignment: 3
  Course: CS213
  Date created: 7th December, 2022
-Purpose:
+Purpose: I made my own class which acts very similar to STL's set.
  */
-
-/*
- Template – Set. Abdullah Mohamed uses a C++ version that does not support STL and he needs a set
-class for his programming job. Help him by writing a template-based class that implements a set of
-items. A set is a collection of items in which no item occurs more than once. Internally, you may
-represent the set using the data structure of your choice (for example, list, vector, arrays, etc.). However,
-the class should externally support the following functions:
- Add a new item to the set. If the item is already in the set then nothing happens.
- Remove an item from the set.
- Return the number of items in the set.
- Determine if an item is a member of the set.
- Return a pointer to a dynamically created array containing each item in the set. The caller of this
-function is responsible for de-allocating the memory.
-Test your class by creating different sets of different data types (for example, strings, integers, or other
-classes). If you add objects to your set, then you may need to overload the == and != operators for the
-object’s class so your template-based set class can properly determine membership.*/
 
 #include <iostream>
 #include <vector>
@@ -39,14 +23,12 @@ private:
     int size;
 public:
     Set(){
-        dynamic_data[1] = 0;
-    }
-    ~Set(){
-        delete[] dynamic_data;
+        size = 0;
     }
     void Push_back(T item);
     void Remove(T item);
     bool isMember(T item);
+    T* returnPointer();
     int Size();
 };
 
@@ -57,16 +39,24 @@ void Set<T>::Push_back(T item) {
     if (find(data.begin(), data.end(), value) == data.end()) {
         data.push_back(value);
         size+=1;
-        T* temp[size];
-        temp = move(dynamic_data);
+
     }
 }
+template<typename T>
+T* Set<T>::returnPointer() {
+    dynamic_data = new T[size];
+    for (int i = 0; i < size; i++) {
+        dynamic_data[i] = data[i];
+    }
+    return dynamic_data;
+}
+
 
 template<typename T>
 void Set<T>::Remove(T item) {
     const T value = item;
     if (find(data.begin(), data.end(), value) != data.end()) {
-        data.std::remove(find(data.begin(), data.end(), value));
+        std::remove(data.begin(), data.end(), value);
         size-=1;
     }
 }
@@ -88,6 +78,23 @@ int Set<T>::Size(){
 int main(){
     Set<int> example;
     example.Push_back(3);
+    cout << "Is 3 a member? " << example.isMember(3) << endl;
+    cout << "Size = " << example.Size() << endl;
     example.Push_back(3);
+    cout << "Size = " << example.Size() << endl;
+    example.Remove(3);
+    cout << "Size = " << example.Size() << endl;
+    cout << "------------------\n";
+    Set<string> example2;
+    example2.Push_back("hello");
+    example2.Push_back("hello");
+    cout << "Value of what pointer points to = " << *example2.returnPointer() << endl;
+    cout << "Is 'hello' a member? " << example2.isMember("hello") << endl;
+    cout << "Size = " << example2.Size() << endl;
+    example2.Push_back("world!");
+    cout << "Size after pushing back world = " << example2.Size() << endl;
+    example2.Remove("hello");
+    cout << "Size after removing hello = " << example2.Size() << endl;
 
+    return 0;
 }
