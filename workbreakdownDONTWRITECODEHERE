@@ -1,5 +1,5 @@
 //
-// Created by Selsabeel on 2022-12-07.
+// This just contains the function names. DO NOT use this to write code. I have attached the functions.cpp, main.cpp, and header file which contains function prototypes!
 //
 #include<iostream>
 using namespace std;
