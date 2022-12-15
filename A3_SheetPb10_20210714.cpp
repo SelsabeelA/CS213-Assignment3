@@ -14,6 +14,28 @@ Purpose: A program that converts the date from month/day format to alphabetic mo
 #include<bits/stdc++.h>
 using namespace std;
 
+
+class MonthError{
+private:
+    std::string my_msg;
+public:
+    MonthError(const std::string& msg): my_msg(msg){};
+    string get_msg(){
+        return my_msg;
+    }
+};
+
+
+class DayError{
+private:
+    std::string my_msg;
+public:
+    DayError(const std::string& msg): my_msg(msg){};
+    string get_msg(){
+        return my_msg;
+    }
+};
+
 string FixDate(int month,int day){
     try{
         string word = "";
@@ -69,28 +91,26 @@ string FixDate(int month,int day){
 
         }
         if(month<1 || month>12){
-            throw "MonthError";
+            throw MonthError("Month does not exist. ");
         }
         if(day>31 || day<1){
-            throw "DayError";
+            throw DayError("Day cannot be greater than 1 or 31.");
         }
         else if(day>30 && (month==4 || month==6 || month==9 || month==11)){
-            throw "DayError";
+            throw DayError("Some months end on the 30th.. ");
         }
         else if(day>29 && month==2){
-            throw "DayError";
+            throw DayError("February ends on the 29th.");
         }
         string result = word + " " + to_string(day);
         cout << result << endl;
         return result;
     }
-    catch(string error){
-        if(error == "MonthError"){
-            cout << "ERROR! You have entered an invalid month.";
-        }
-        if(error == "DayError"){
-            cout << "ERROR! You have entered an invalid day.";
-        }
+    catch(MonthError& error){
+        cout << error.get_msg() << endl;
+    }
+    catch(DayError& error){
+        cout << error.get_msg() << endl;
     }
 }
 
