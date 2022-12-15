@@ -11,42 +11,156 @@
 Purpose: Create our own version of STL's vectors.
  */
 
+
+
+
+
 #ifndef ASSIGNMENT3_A3_TASK2_20210714_20210423_H
 #define ASSIGNMENT3_A3_TASK2_20210714_20210423_H
 #include<iostream>
 #include<bits/stdc++.h>
-#include<iterator>
+#include <iterator>
 using namespace std;
+
+template<typename T>
+using myiterator = T * ;
 
 
 template <typename T>
 class SNVector {
+
 private:
     T* data;
     int size;
     int capacity;
 public:
+    class MyIterator : public std::iterator<std::input_iterator_tag, T>
+    {
+        int* p;
+    public:
+        MyIterator(int* x) :p(x) {}
+        MyIterator(const MyIterator& mit) : p(mit.p) {}
+        MyIterator& operator++() {++p;return *this;}
+        MyIterator operator++(int) {MyIterator tmp(*this); operator++(); return tmp;}
+        bool operator==(const MyIterator& rhs) const {return p==rhs.p;}
+        bool operator!=(const MyIterator& rhs) const {return p!=rhs.p;}
+        int& operator*() {return *p;}
+    };
+    MyIterator begin(){
+        return MyIterator(data);
+    }
+    void erase(MyIterator item){
+        T* new_data = new T[capacity];
+        int count;
+        for(int i=0;i<size;i++){
+            if(MyIterator(data) == item){
+                count = i;
+            }
+        }
+        for(int i=0;i<count;i++){
+            new_data[i] = data[i];
+        }
+        size = size-1;
+        for(int i = count;i<size;i++){
+            new_data[i] = data[i];
+        }
+        delete[] data;
+        data = new_data;
+    }
+
     SNVector(int cap = 2){
         capacity = cap;
         size = 0;
         data = new T[capacity];
     }
-    SNVector(T*, int n)	;	// Initialize by n items from array Selsabeel
-    ~SNVector()		;		// Delete allocated memory Selsabeel
-    SNVector &operator=(const SNVector&&); // Move assignment Selsabeel
-    int push_back(T); // Add item to end of vec & return # of items Selsabeel
-    // Increase capacity of needed
-    // Throw exception if invalid iter
+    SNVector(T* array, int n)	// Selsabeel
+    {
+        data = new T[n];
+        for (int i = 0; i < n; i++) {
+            data[i] = array[i];
+        }
+        size = n;
+    }
+    ~SNVector(){
+        delete[] data;
+    }
+    SNVector& operator=(const SNVector&& other){
+    // PLEASE NOTE THIS IS NOT MY CODE
+    // THIS IS LECTURE CODE
+    // PLEASE REMEMBER TO CHANGE
+    if(this != &other){
+        delete[] data;
+        size = other.size;
+        capacity = other.capacity;
+        data = new T[capacity];
+        for(int i = 0; i < other.size; i++){
+            data[i] = other.data[i];
+        }
+        return data;
+    }
+    else{
+        cout << "Cannot delete self" << endl;
+    }
+    }
 
-    //void erase(iterator);        // Remove item at iterator Selsabeel
 
-    // iterator 1 <= iterator 2 otherwise do nothing
-// Throw exception if any iterator outside range
-    void clear();     // Delete all vector content Selsabeel
-    bool operator==(const SNVector<T>&); // Return true if == Selsabeel
-    int Size() const;     // Return current size of vec  Selsabeel
-    int resize();         // Relocate to bigger space Selsabeel
+    SNVector(SNVector&& other) // Selsabeel move constructor
+    {
+        data = other.data;
+        other.data = nullptr;
+    }
+    int push_back(T item) // Selsabeel
+    {
+        size+=1;
+        resize();
+        data[size-1] = item;
+        return size;
+    }
+    void clear()     // Delete all vector content Selsabeel
+    {
+        for(int i =0;i<size;i++){
+            data[i] = NULL;
+        }
+        size = 0;
+    }
+    //void erase(myiterator<T> item);
+    //myiterator<T> begin();	// Return an iterator (T*) Selsabeel
+    bool operator==(const SNVector<T>& rhs) // Selsabeel
+    {
+        if(size != rhs.size){
+            return false;
+        }
+        for(int i=0;i<size;i++){
+            if(data[i] != rhs.data[i]){
+                return false;
+            }
+        }
+        return true;
+    }
+    int Size() const     //  Selsabeel
+    {
+        const int const_size = size;
+        return const_size;
+    }
+    int resize()         // Selsabeel
+    {
+        int new_capacity = capacity * 2;
+        T* new_data = new T[new_capacity];
+        for (int i = 0; i < size; i++) {
+            new_data[i] = data[i];
+        }
+        delete[] data;
+        data = new_data;
+        capacity = new_capacity;
+        return capacity;
+    }
     // Friends
-    friend ostream& operator << (ostream& out, SNVector<T>); //Selsabeel
+    friend std::ostream& operator<< (std::ostream& out, const SNVector<T>& v){
+        for (int i = 0; i < v.Size(); i++) {
+            out << v.data[i] << " ";
+        }
+        return out;
+    }
 };
 #endif //ASSIGNMENT3_A3_TASK2_20210714_20210423_H
+
