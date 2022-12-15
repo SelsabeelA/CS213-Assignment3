@@ -1,6 +1,5 @@
-//
-// Created by Selsabeel on 2022-12-09.
-//
+#include<iostream>
+using namespace std;
 #include "A3_Task2_20210714_20210423.h"
 
 int main(){
@@ -11,11 +10,19 @@ int main(){
     vec.push_back((string) "Guten Tag");
     vec.push_back((string) "Salam Alykum");
     vec.push_back((string) "Hola");
-    cout << vec;
+    cout << vec.Size() << endl;
 
-    cout << endl << endl;
-    SNVector<string> vec2;
-    vec2 = vec;
+    SNVector<int> intvec(4);
+    intvec.push_back(4);
+    intvec.push_back(3);
+    intvec.push_back(2);
+    intvec.push_back(5);
+    intvec.begin()++;
+    cout << intvec.Size();
+    intvec.erase(intvec.begin());
+    cout << intvec.Size();
+    cout << endl;
+    cout << intvec;
 
-    cout << vec2;
+    return 0;
 }
