@@ -22,12 +22,8 @@ Purpose: Create our own version of STL's vectors.
 #include <iterator>
 using namespace std;
 
-template<typename T>
-using myiterator = T * ;
-
-
 template <typename T>
-class SNVector {
+class SNVector { // Selsabeel
 
 private:
     T* data;
@@ -36,20 +32,31 @@ private:
 public:
     class MyIterator : public std::iterator<std::input_iterator_tag, T>
     {
-        int* p;
+        T* it_data;
     public:
-        MyIterator(int* x) :p(x) {}
-        MyIterator(const MyIterator& mit) : p(mit.p) {}
-        MyIterator& operator++() {++p;return *this;}
-        MyIterator operator++(int) {MyIterator tmp(*this); operator++(); return tmp;}
-        bool operator==(const MyIterator& rhs) const {return p==rhs.p;}
-        bool operator!=(const MyIterator& rhs) const {return p!=rhs.p;}
-        int& operator*() {return *p;}
+        MyIterator(T* data){
+            it_data = data;
+        }
+        MyIterator(const MyIterator& m_data){
+            it_data = m_data.it_data;
+        }
+        MyIterator& operator++(){
+            it_data++;
+            return *this;
+        }
+        int& operator*(){
+            return *it_data;
+        }
+        bool operator==(const MyIterator& rhs) const {
+            return it_data==rhs.it_data;
+        }
+        bool operator!=(const MyIterator& rhs) const {
+            return it_data!=rhs.it_data;}
     };
-    MyIterator begin(){
+    MyIterator begin(){ //Selsabeel
         return MyIterator(data);
     }
-    void erase(MyIterator item){
+    void erase(MyIterator item){ // Selsabeel
         T* new_data = new T[capacity];
         int count;
         for(int i=0;i<size;i++){
@@ -68,7 +75,7 @@ public:
         data = new_data;
     }
 
-    SNVector(int cap = 2){
+    SNVector(int cap = 2){ // Selsabeel
         capacity = cap;
         size = 0;
         data = new T[capacity];
@@ -84,7 +91,7 @@ public:
     ~SNVector(){
         delete[] data;
     }
-    SNVector& operator=(const SNVector&& other){
+    SNVector& operator=(const SNVector&& other){ // Selsabeel
     // PLEASE NOTE THIS IS NOT MY CODE
     // THIS IS LECTURE CODE
     // PLEASE REMEMBER TO CHANGE
@@ -123,8 +130,7 @@ public:
         }
         size = 0;
     }
-    //void erase(myiterator<T> item);
-    //myiterator<T> begin();	// Return an iterator (T*) Selsabeel
+
     bool operator==(const SNVector<T>& rhs) // Selsabeel
     {
         if(size != rhs.size){
@@ -154,7 +160,7 @@ public:
         capacity = new_capacity;
         return capacity;
     }
-    // Friends
+    //                   (Selsabeel)
     friend std::ostream& operator<< (std::ostream& out, const SNVector<T>& v){
         for (int i = 0; i < v.Size(); i++) {
             out << v.data[i] << " ";
@@ -163,4 +169,5 @@ public:
     }
 };
 #endif //ASSIGNMENT3_A3_TASK2_20210714_20210423_H
+
 
