@@ -31,17 +31,19 @@ private:
     int capacity;
 public:
     class MyIterator : public std::iterator<std::input_iterator_tag, T>
+
     {
         T* it_data;
     public:
         MyIterator(T* data){
             it_data = data;
         }
-        ~MyIterator(){
-        it_data = NULL;
-        }
+
         MyIterator(const MyIterator& m_data){
             it_data = m_data.it_data;
+        }
+        ~MyIterator(){
+            it_data = NULL;
         }
         MyIterator& operator++(){
             it_data++;
@@ -56,10 +58,12 @@ public:
         bool operator!=(const MyIterator& rhs) const {
             return it_data!=rhs.it_data;}
     };
-    MyIterator begin(){ //Selsabeel
+    using iterator = MyIterator;
+
+    iterator begin(){ //Selsabeel
         return MyIterator(data);
     }
-    void erase(MyIterator item){ // Selsabeel
+    void erase(iterator item){ // Selsabeel
         T* new_data = new T[capacity];
         int count;
         for(int i=0;i<size;i++){
@@ -95,22 +99,19 @@ public:
         delete[] data;
     }
     SNVector& operator=(const SNVector&& other){ // Selsabeel
-    // PLEASE NOTE THIS IS NOT MY CODE
-    // THIS IS LECTURE CODE
-    // PLEASE REMEMBER TO CHANGE
-    if(this != &other){
-        delete[] data;
-        size = other.size;
-        capacity = other.capacity;
-        data = new T[capacity];
-        for(int i = 0; i < other.size; i++){
-            data[i] = other.data[i];
+        if(this != &other){
+            delete[] data;
+            size = other.size;
+            capacity = other.capacity;
+            data = new T[capacity];
+            for(int i = 0; i < other.size; i++){
+                data[i] = other.data[i];
+            }
+            return data;
         }
-        return data;
-    }
-    else{
-        cout << "Cannot delete self" << endl;
-    }
+        else{
+            cout << "Cannot delete self" << endl;
+        }
     }
 
 
@@ -172,5 +173,3 @@ public:
     }
 };
 #endif //ASSIGNMENT3_A3_TASK1_20210714_20210423_H
-
-
