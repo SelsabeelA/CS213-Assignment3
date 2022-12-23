@@ -38,7 +38,7 @@ public:
             it_data = data;
         }
         ~MyIterator(){
-        delete[] it_data;
+        it_data = NULL;
         }
         MyIterator(const MyIterator& m_data){
             it_data = m_data.it_data;
