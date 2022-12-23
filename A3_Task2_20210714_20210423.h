@@ -37,6 +37,9 @@ public:
         MyIterator(T* data){
             it_data = data;
         }
+        ~MyIterator(){
+        delete[] it_data;
+        }
         MyIterator(const MyIterator& m_data){
             it_data = m_data.it_data;
         }
