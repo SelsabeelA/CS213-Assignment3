@@ -2,8 +2,8 @@
 /*
  Author1: Selsabeel Asim Ali Elbagir
  ID1: 20210714
- Author2:
- ID2:
+ Author2: Nada Ibrahim Khedr Ismail
+ ID2: 20210423
  Section: S11
  Assignment: 3
  Course: CS213
@@ -59,8 +59,88 @@ public:
             return it_data!=rhs.it_data;}
     };
     using iterator = MyIterator;
+ 
+  SNVector (const SNVector& other){
+        this->size= other.size;
+        this->capacity = other.capacity;
+        delete[] data;
+        data = new T[size+1];
+        strcpy(data  ,other);
 
-    iterator begin(){ //Selsabeel
+    }    // Initialize with a copy Nada
+
+    SNVector &operator=(const SNVector& other){
+        this->size= other.size;
+        this->capacity = other.capacity;
+        delete[] data;
+        data = new T[size+1];
+        strcpy(data  ,other);
+
+    } // Copy assignment Nada
+
+    T& operator[](int index){
+        try {
+            if (index >= size || index < 0) {
+                throw std::out_of_range("out of range");
+
+            }
+        }
+            catch(std::out_of_range){
+                cout<<"index out of range\n";
+
+            }
+            return data[index];
+        }
+        // Access item by reference Nada
+// Throw an exception if out of range
+
+
+    T pop_back() {
+        T* new_data = new T[size-1];
+        T last = data[size-1];
+        for (int i=0 ; i<size-1 ; i++){
+            new_data[i] = data[i];
+        }
+        size -=1;
+        for(int i=0 ; i<size ; i++){
+            data[i] = new_data[i];
+        }
+        return last;
+
+
+
+    } // Remove and return last element in vec Nada
+
+    iterator end(){
+
+        return MyIterator(data);
+    }
+
+    void erase(iterator iterator1, iterator iterator2){
+        T* temp_data = new T[size];
+        int k=0;
+
+        for (T* itr1 = data;itr1 < iterator1 ; itr1++){
+            temp_data[k] = itr1;
+            k++;
+
+        }
+        int l=0;
+        T* enditr = &data[size-1];
+        for (T* itr2 = iterator2;itr2 < enditr ; itr2++){
+            temp_data[l] = itr2;
+          l++;
+        }
+        for (auto i : temp_data){
+            data = i;
+
+        }
+        delete [] temp_data;
+    }// Remove items between Nada
+// iterator 1 <= iterator 2 otherwise do nothing
+// Throw exception if any iterator outside range
+
+ iterator begin(){ //Selsabeel
         return MyIterator(data);
     }
     void erase(iterator item){ // Selsabeel
